@@ -111,7 +111,7 @@ public class BlipRender {
 		}
 		
 		TextView textView = wavelet.appendBlip().getDocument();
-		textView.append(post.getPostTitle() +
+		textView.appendMarkup(post.getPostTitle() +
 						"\nBy: " + post.getPostAuthor() + " At: " + postUpdated + 
 						"\nPost URL: " + post.getPostURL() + 
 						"\nDescription: " + post.getPostDescription() + "\n");
