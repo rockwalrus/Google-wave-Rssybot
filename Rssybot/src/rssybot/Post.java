@@ -67,7 +67,7 @@ public class Post implements Comparator<Post>{
 		this.postAuthor = postAuthor;
 		this.postURL = postURL;
 		this.postDescription = postDescription;
-		this.postPublished = postPublished;
+		this.postPublished = (postUpdated != null) ? postUpdated : postPublished;
 	}
 
 	public String getFeedURL() {
