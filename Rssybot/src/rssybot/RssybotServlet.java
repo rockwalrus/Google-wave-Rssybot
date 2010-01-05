@@ -396,10 +396,7 @@ public class RssybotServlet extends AbstractRobotServlet {
 				if(feedsResult.size() == 0) {
 					feedsLocal = new ArrayList<Feed>();
 				} else {
-					feedsLocal = new ArrayList<Feed>();
-					for(int i = 0; i < feedsResult.size(); i++) {
-						feedsLocal.add(feedsResult.get(i));
-					}
+					feedsLocal = new ArrayList<Feed>(feedsResult);
 				}
 			} catch(JDOObjectNotFoundException ex) {
 				feedsLocal = new ArrayList<Feed>();
@@ -415,10 +412,7 @@ public class RssybotServlet extends AbstractRobotServlet {
 				if(postsResult.size() == 0) {
 					postsLocal = new ArrayList<Post>();
 				} else {
-					postsLocal = new ArrayList<Post>();
-					for(int i = 0; i < postsResult.size(); i++) {
-						postsLocal.add(postsResult.get(i));
-					}
+					postsLocal = new ArrayList<Post>(postsResult);
 				}
 			} catch(JDOObjectNotFoundException ex) {
 				postsLocal = new ArrayList<Post>();
@@ -434,10 +428,7 @@ public class RssybotServlet extends AbstractRobotServlet {
 				if(subscriberResult.size() == 0) {
 					subscribersLocal = new ArrayList<Subscriber>();
 				} else {
-					subscribersLocal = new ArrayList<Subscriber>();
-					for(int i = 0; i < subscriberResult.size(); i++) {
-						subscribersLocal.add(subscriberResult.get(i));
-					}
+					subscribersLocal = new ArrayList<Subscriber>(subscriberResult);
 				}
 			} catch(JDOObjectNotFoundException ex) {
 				subscribersLocal = new ArrayList<Subscriber>();
