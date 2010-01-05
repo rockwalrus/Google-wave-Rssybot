@@ -124,8 +124,7 @@ public class RSSUtils {
 	@SuppressWarnings("unchecked")
 	public void updateFeeds(ArrayList<Feed> feeds, ArrayList<Post> posts, ArrayList<Subscriber> subscribers, RobotMessageBundle bundle) {
 		//Run through each feed
-		for(int i = 0; i < feeds.size(); i++) {
-			Feed feed = feeds.get(i);
+		for(Feed feed : feeds) {
 			String feedURL = feed.getFeedURL();
 			
 			try {
@@ -135,18 +134,17 @@ public class RSSUtils {
 				
 				//Get posts from local copy
 				ArrayList<Post> localPosts = new ArrayList<Post>();
-				for(int j = 0; j < posts.size(); j++) {
-					if(posts.get(j).getFeedURL().equals(feedURL)) {
-						localPosts.add(posts.get(j));
+				for(Post post : posts) {
+					if(post.getFeedURL().equals(feedURL)) {
+						localPosts.add(post);
 					}
 				}
 				
 				//Loop through server copy to see if we have it
-				for(int j = serverPosts.size() -1; j >= 0; j--) {
+				for(int j = serverPosts.size() - 1; j >= 0; j--) {
 					SyndEntry newEntry = (SyndEntry)serverPosts.get(j);
 					boolean contains = false;
-					for(int k = 0; k < localPosts.size(); k++) {
-						Post localPost = localPosts.get(k);
+					for(Post localPost : localPosts) {
 						if(newEntry.getLink().equals(localPost.getPostURL()) 
 								&& newEntry.getTitle().equals(localPost.getPostTitle())) {
 							contains = true;
@@ -160,10 +158,9 @@ public class RSSUtils {
 						posts.add(newPost);
 						
 						//Write to all subscribers
-						for(int k = 0; k < subscribers.size(); k++) {
-							if(subscribers.get(k).getFeedURL().equals(feedURL)) {
-								Subscriber temp = subscribers.get(k);
-								render.appendNewFeedPost(bundle.getWavelet(temp.getWaveID(), temp.getWaveletID()), newPost);
+						for(Subscriber subscriber : subscribers) {
+							if(subscriber.getFeedURL().equals(feedURL)) {
+								render.appendNewFeedPost(bundle.getWavelet(subscriber.getWaveID(), subscriber.getWaveletID()), newPost);
 							}
 						}
 					}
