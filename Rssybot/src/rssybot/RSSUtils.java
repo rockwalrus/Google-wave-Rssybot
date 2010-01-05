@@ -161,8 +161,8 @@ public class RSSUtils {
 						
 						//Write to all subscribers
 						for(int k = 0; k < subscribers.size(); k++) {
-							if(subscribers.get(i).getFeedURL().equals(feedURL)) {
-								Subscriber temp = subscribers.get(i);
+							if(subscribers.get(k).getFeedURL().equals(feedURL)) {
+								Subscriber temp = subscribers.get(k);
 								render.appendNewFeedPost(bundle.getWavelet(temp.getWaveID(), temp.getWaveletID()), newPost);
 							}
 						}
