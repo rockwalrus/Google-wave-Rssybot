@@ -130,7 +130,7 @@ public class RSSUtils {
 			try {
 				//Grab all the posts from the RSS server for this feed
 				SyndFeed rawFeed = retrieveFeed(feedURL);
-				List serverPosts = rawFeed.getEntries();
+				List<SyndEntry> serverPosts = rawFeed.getEntries();
 				
 				//Get posts from local copy
 				ArrayList<Post> localPosts = new ArrayList<Post>();
@@ -142,7 +142,7 @@ public class RSSUtils {
 				
 				//Loop through server copy to see if we have it
 				for(int j = serverPosts.size() - 1; j >= 0; j--) {
-					SyndEntry newEntry = (SyndEntry)serverPosts.get(j);
+					SyndEntry newEntry = serverPosts.get(j);
 					boolean contains = false;
 					for(Post localPost : localPosts) {
 						if(newEntry.getLink().equals(localPost.getPostURL()) 
