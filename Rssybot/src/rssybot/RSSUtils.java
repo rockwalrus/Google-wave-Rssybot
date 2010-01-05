@@ -121,59 +121,65 @@ public class RSSUtils {
 	/**
 	 * Updates all the feeds and updates the users too
 	 */
-	@SuppressWarnings("unchecked")
 	public void updateFeeds(ArrayList<Feed> feeds, ArrayList<Post> posts, ArrayList<Subscriber> subscribers, RobotMessageBundle bundle) {
-		//Run through each feed
 		for(Feed feed : feeds) {
-			String feedURL = feed.getFeedURL();
-			
-			try {
-				//Grab all the posts from the RSS server for this feed
-				SyndFeed rawFeed = retrieveFeed(feedURL);
-				List<SyndEntry> serverPosts = rawFeed.getEntries();
-				
-				//Get posts from local copy
-				ArrayList<Post> localPosts = new ArrayList<Post>();
-				for(Post post : posts) {
-					if(post.getFeedURL().equals(feedURL)) {
-						localPosts.add(post);
-					}
-				}
-				
-				//Loop through server copy to see if we have it
-				for(int j = serverPosts.size() - 1; j >= 0; j--) {
-					SyndEntry newEntry = serverPosts.get(j);
-					boolean contains = false;
-					for(Post localPost : localPosts) {
-						if(newEntry.getLink().equals(localPost.getPostURL()) 
-								&& newEntry.getTitle().equals(localPost.getPostTitle())) {
-							contains = true;
-							break;
-						}
-					}
-					
-					//It is not there
-					if(contains == false) {
-						Post newPost = updatePost(newEntry, feedURL);
-						posts.add(newPost);
-						
-						//Write to all subscribers
-						for(Subscriber subscriber : subscribers) {
-							if(subscriber.getFeedURL().equals(feedURL)) {
-								render.appendNewFeedPost(bundle.getWavelet(subscriber.getWaveID(), subscriber.getWaveletID()), newPost);
-							}
-						}
-					}
-				}
-				
-			}
-			catch(Exception ex) {
-				/*
-				 * This should never be thrown. All links will have been checked already. If an error does occur then
-				 * the next cron event will pick it up next time.
-				 */
-			}
+			updateFeed(feed, posts, subscribers, bundle);
 		}
+	}
+
+
+
+	@SuppressWarnings("unchecked")
+	public void updateFeed(Feed feed, ArrayList<Post> posts,
+		ArrayList<Subscriber> subscribers, RobotMessageBundle bundle) {
+	    String feedURL = feed.getFeedURL();
+	    
+	    try {
+	    	//Grab all the posts from the RSS server for this feed
+	    	SyndFeed rawFeed = retrieveFeed(feedURL);
+	    	List<SyndEntry> serverPosts = rawFeed.getEntries();
+	    	
+	    	//Get posts from local copy
+	    	ArrayList<Post> localPosts = new ArrayList<Post>();
+	    	for(Post post : posts) {
+	    		if(post.getFeedURL().equals(feedURL)) {
+	    			localPosts.add(post);
+	    		}
+	    	}
+	    	
+	    	//Loop through server copy to see if we have it
+	    	for(int j = serverPosts.size() - 1; j >= 0; j--) {
+	    		SyndEntry newEntry = serverPosts.get(j);
+	    		boolean contains = false;
+	    		for(Post localPost : localPosts) {
+	    			if(newEntry.getLink().equals(localPost.getPostURL()) 
+	    					&& newEntry.getTitle().equals(localPost.getPostTitle())) {
+	    				contains = true;
+	    				break;
+	    			}
+	    		}
+	    		
+	    		//It is not there
+	    		if(contains == false) {
+	    			Post newPost = updatePost(newEntry, feedURL);
+	    			posts.add(newPost);
+	    			
+	    			//Write to all subscribers
+	    			for(Subscriber subscriber : subscribers) {
+	    				if(subscriber.getFeedURL().equals(feedURL)) {
+	    					render.appendNewFeedPost(bundle.getWavelet(subscriber.getWaveID(), subscriber.getWaveletID()), newPost);
+	    				}
+	    			}
+	    		}
+	    	}
+	    	
+	    }
+	    catch(Exception ex) {
+	    	/*
+	    	 * This should never be thrown. All links will have been checked already. If an error does occur then
+	    	 * the next cron event will pick it up next time.
+	    	 */
+	    }
 	}
 }
 
