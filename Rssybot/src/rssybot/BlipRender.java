@@ -82,6 +82,7 @@ public class BlipRender {
 		wavelet.setTitle(feedTitle);
 		textView.append("\n");
 		textView.appendElement(new FormElement(ElementType.BUTTON, root.ID_BUTT_UNSUBSCRIBE, "Unsubscribe from this thread"));
+		textView.appendElement(new FormElement(ElementType.BUTTON, root.ID_BUTT_UPDATE, "Update this thread"));
 	}
 	
 	/**

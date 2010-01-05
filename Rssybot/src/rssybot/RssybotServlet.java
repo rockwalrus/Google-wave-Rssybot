@@ -97,6 +97,8 @@ public class RssybotServlet extends AbstractRobotServlet {
 	 */
 	public final String ID_BUTT_CLOSE_PART = "close_rss_feed_butt_part";
 	
+	public final String ID_BUTT_UPDATE = "update";
+	
 	/**
 	 * Persistent manager for communication with the datastore
 	 */
@@ -202,6 +204,17 @@ public class RssybotServlet extends AbstractRobotServlet {
 			render.addViewerGadget(ev.getBlip(), ev.getButtonName());
 		} else if(ev.getButtonName().contains(ID_BUTT_CLOSE_PART)) {
 			render.removeViewerGadget(ev.getBlip(), ev.getButtonName());
+		}  else if(ev.getButtonName().contains(ID_BUTT_UPDATE)) {
+		    	pm = PMF.get().getPersistenceManager();
+		    
+		    	Query feedQuery = pm.newQuery(Feed.class, "feedURL = (select feedURL from rssybot.Feed f where f.waveID = :waveID and f.waveletID = :waveletID");
+		    	feedQuery.setUnique(true);
+		    	Wavelet wavelet = ev.getWavelet();
+		    	
+		    	Feed feed = (Feed)(feedQuery.execute(wavelet.getWaveId(), wavelet.getWaveletId()));
+		    	rssUtils.updateFeed(feed, postsLocal, subscribersLocal, bundle);
+			writeRecords();
+			loadRecords();
 		}
 	}
 	
