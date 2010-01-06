@@ -25,6 +25,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.wave.api.RobotMessageBundle;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -35,6 +37,7 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 public class RSSUtils {
+    	private static final Logger log = Logger.getLogger(RSSUtils.class.getName());
 	
 	/**
 	 * Class that renders blips
@@ -167,6 +170,7 @@ public class RSSUtils {
 	    			//Write to all subscribers
 	    			for(Subscriber subscriber : subscribers) {
 	    				if(subscriber.getFeedURL().equals(feedURL)) {
+	    				    	log.warning(String.format("Trying to append to wave %s wavelet %s", subscriber.getWaveID(), subscriber.getWaveletID()));
 	    					render.appendNewFeedPost(bundle.getWavelet(subscriber.getWaveID(), subscriber.getWaveletID()), newPost);
 	    				}
 	    			}
@@ -179,6 +183,7 @@ public class RSSUtils {
 	    	 * This should never be thrown. All links will have been checked already. If an error does occur then
 	    	 * the next cron event will pick it up next time.
 	    	 */
+		log.log(Level.SEVERE, "Exception while updating posts", ex);
 	    }
 	}
 }
