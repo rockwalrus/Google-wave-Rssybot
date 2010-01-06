@@ -206,10 +206,9 @@ public class RssybotServlet extends AbstractRobotServlet {
 			render.removeViewerGadget(ev.getBlip(), ev.getButtonName());
 		}  else if(ev.getButtonName().contains(ID_BUTT_UPDATE)) {
 		    	pm = PMF.get().getPersistenceManager();
-		    
-		    	Query feedQuery = pm.newQuery(Feed.class, "feedURL = (select feedURL from rssybot.Feed f where f.waveID = :waveID and f.waveletID = :waveletID");
-		    	feedQuery.setUnique(true);
 		    	Wavelet wavelet = ev.getWavelet();
+		    	
+		    	Query feedQuery = pm.newQuery("select unique from rssybot.Feed where feedURL == (select unique from rssybot.Subscriber where waveID == :waveID & waveletID == :waveletID)");
 		    	
 		    	Feed feed = (Feed)(feedQuery.execute(wavelet.getWaveId(), wavelet.getWaveletId()));
 		    	rssUtils.updateFeed(feed, postsLocal, subscribersLocal, bundle);
