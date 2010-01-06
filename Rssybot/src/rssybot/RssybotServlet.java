@@ -211,6 +211,8 @@ public class RssybotServlet extends AbstractRobotServlet {
 		    	Query feedQuery = pm.newQuery("select unique from rssybot.Feed where feedURL == (select unique from rssybot.Subscriber where waveID == :waveID & waveletID == :waveletID)");
 		    	
 		    	Feed feed = (Feed)(feedQuery.execute(wavelet.getWaveId(), wavelet.getWaveletId()));
+		    	pm.close();
+		    	
 		    	rssUtils.updateFeed(feed, postsLocal, subscribersLocal, bundle);
 			writeRecords();
 			loadRecords();
